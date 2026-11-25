@@ -12,6 +12,14 @@ LINE = "My neighbor's dog barks at me every morning, so I barked back once. Now 
 
 
 def main() -> None:
+    # Gate validation: the entry must satisfy the competition gate before
+    # anything is written, so a bad constant can never produce a bad file.
+    if not 1 <= len(LINE) <= 200:
+        raise ValueError(f"entry length {len(LINE)} outside 1-200 characters")
+    if "\n" in LINE or "\r" in LINE:
+        raise ValueError("entry must be exactly one line")
+    if LINE != LINE.strip():
+        raise ValueError("entry must not have leading/trailing whitespace")
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
